@@ -1,5 +1,7 @@
 package demo.controllers;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -23,7 +25,7 @@ public class TesteController {
 	}
 	
 
-	@RequestMapping(value="/alunos/{ra}",method=RequestMethod.GET)
+	@RequestMapping(value="/aluno/{ra}",method=RequestMethod.GET)
 	public Aluno getAluno(@PathVariable Integer ra){
 		
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("Teste4");
@@ -34,10 +36,32 @@ public class TesteController {
 		emf.close();
 		return novo;
 	}
-	
 
-	@RequestMapping(value="/alunos",method=RequestMethod.POST)
-	public String criarAluno(@RequestBody()  Aluno novo){
+	@RequestMapping(value="/aluno/{ra}",method=RequestMethod.DELETE)
+	public void deleteAluno(@PathVariable Integer ra){
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("Teste4");
+		EntityManager em = emf.createEntityManager();
+		em.getTransaction().begin();
+		em.createQuery("Delete From Aluno A Where A.ra = :ra")
+				.setParameter("ra",ra).executeUpdate();
+		em.getTransaction().commit();
+		em.close();
+		emf.close();
+	}
+	
+	@RequestMapping(value="/aluno",method=RequestMethod.GET)
+	public List<Aluno> retornarAlunos(){
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("Teste4");
+		EntityManager em = emf.createEntityManager();
+		List<Aluno> lista = em.createNamedQuery("Aluno.findAll").getResultList();
+		em.close();
+		emf.close();
+		return lista;
+	}
+
+
+	@RequestMapping(value="/aluno",method=RequestMethod.POST)
+	public String criarAluno(@RequestBody  Aluno novo){
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("Teste4");
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
