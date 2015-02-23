@@ -61,7 +61,7 @@ public class TesteController {
 
 
 	@RequestMapping(value="/aluno",method=RequestMethod.POST)
-	public String criarAluno(@RequestBody  Aluno novo){
+	public Aluno criarAluno(@RequestBody  Aluno novo){
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("Teste4");
 		EntityManager em = emf.createEntityManager();
 		em.getTransaction().begin();
@@ -69,7 +69,7 @@ public class TesteController {
 		em.getTransaction().commit();
 		em.close();
 		emf.close();
-		return "Aluno:"+novo.getNome();
+		return novo;
 	}
 	
 }
